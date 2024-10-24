@@ -1,33 +1,35 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $itens = $_POST['item'] ?? [];
-    $quantidades = $_POST['quantidade'] ?? [];
 
-    $valores = [
-        "X-Burguer" => 8.30,
-        "Misto Quente" => 7.00,
-        "X-Salada" => 8.90,
-        "Pepsi" => 6.00,
-        "Sprite" => 5.00,
-        "H2O" => 5.50
-    ];
+$precos = array(
+    "X-Bacon" => 10.00,
+    "Hambúrguer" => 8.50,
+    "Hot Dog" => 7.00,
+    "Coca-Cola" => 5.00,
+    "Guaraná" => 4.50
+);
 
+
+if (isset($_POST['item']) && isset($_POST['quantidade'])) {
+    $itensSelecionados = $_POST['item'];
+    $quantidades = $_POST['quantidade'];
     $total = 0;
-    
-    echo "<h1 style='text-align:center;color:#e74c3c;'>Resumo do Pedido</h1>";
 
-    foreach ($itens as $i => $item) {
-        $quantidade = (int)$quantidades[$i];
-        
+    echo "<h1>Resumo do Pedido</h1>";
+    echo "<ul>";
+
+    foreach ($itensSelecionados as $item => $valor) {
+        $quantidade = $quantidades[$item];
+
         if ($quantidade > 0) {
-            $subtotal = $quantidade * $valores[$item];
-            echo "<li style='font-size:16px;margin-bottom:10px;'>$item: $quantidade x R$ " . number_format($valores[$item], 2, ',', '.') . " = R$ " . number_format($subtotal, 2, ',', '.') . "</li>";
+            $subtotal = $quantidade * $precos[$item];
             $total += $subtotal;
+            echo "<li>$quantidade x $item - R$ " . number_format($subtotal, 2, ',', '.') . "</li>";
         }
     }
 
     echo "</ul>";
-    echo "<p style='font-size:18px; text-align:right;'><strong>Total Geral: R$ " . number_format($total, 2, ',', '.') . "</strong></p>";
-    echo "</div>";
+    echo "<h2>Total: R$ " . number_format($total, 2, ',', '.') . "</h2>";
+} else {
+    echo "<h1>Nenhum item foi selecionado</h1>";
 }
 ?>
